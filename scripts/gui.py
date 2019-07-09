@@ -2,6 +2,7 @@
 
 import rospy
 from mswrapper.srv import *
+from std_msgs.msg import String
 import Tkinter
 
 """
