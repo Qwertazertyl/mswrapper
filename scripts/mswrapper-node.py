@@ -37,31 +37,33 @@ def handle_send_command(req):
     if not controller_response:
         controller_response = ""
     return SendCommandResponse(String(controller_response))
+#Create publishers
+# (topic name, message type (must be imported),
+# queue_size (Incomming message queue, if the queue is full,
+# the oldest message will be thrown out)) 
+input_1_pub = rospy.Publisher('mswrapper/input_1', Bool, queue_size=10)
+
+#Create subscribers for each topic, with callback functions
+# (topic name, message type (must be imported), callback function)
+rospy.Subscriber('mswrapper/set_speed', Float64, set_speed_callback)
+rospy.Subscriber('mswrapper/send_command', String, send_command_callback)
+
+#Initialize and name node 
+# In ROS, nodes are uniquely named. If two nodes with the same          
+# name are launched, the previous one is kicked off. The
+# anonymous=True flag means that rospy will choose a unique
+# name for our 'listener' node so that multiple listeners can
+# run simultaneously.
+rospy.init_node('asciicom', anonymous=False)
+
+#Create a service to send a command and recieve the response
+# Services make more sense for sending commands because they 
+# can handle sending direct responses.
+send_command_service = rospy.Service('mswrapper/send_command', SendCommand, handle_send_command)
+
 
 def loop():
-    #Create publishers
-    # (topic name, message type (must be imported),
-    # queue_size (Incomming message queue, if the queue is full,
-    # the oldest message will be thrown out)) 
-    input_1_pub = rospy.Publisher('mswrapper/input_1', Bool, queue_size=10)
-
-    #Create subscribers for each topic, with callback functions
-    # (topic name, message type (must be imported), callback function)
-    rospy.Subscriber('mswrapper/set_speed', Float64, set_speed_callback)
-    rospy.Subscriber('mswrapper/send_command', String, send_command_callback)
-
-    #Initialize and name node 
-    # In ROS, nodes are uniquely named. If two nodes with the same          
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    rospy.init_node('asciicom', anonymous=False)
-
-    #Create a service to send a command and recieve the response
-    # Services make more sense for sending commands because they 
-    # can handle sending direct responses.
-    send_command_service = rospy.Service('mswrapper/send_command', SendCommand, handle_send_command)
+    
 
     # In hz; Makes best effort at maintaining rate for a loop.
     # Set really low to prevent overlapping with other commands.
