@@ -18,10 +18,10 @@ Serves the service mswrapper/send_command_service to send any ascii command to t
 """
 
 #Create an instance of the Ethernetcommunicator class as cm
-#cm = ethernetcommunicator.Ethernetcommunicator()
+cm = ethernetcommunicator.Ethernetcommunicator()
 
 #Create an instance of the Serialcommunicator class as cm
-cm = serialcommunicator.Serialcommunicator()
+#cm = serialcommunicator.Serialcommunicator()
 
 def send_command_callback(data):
     return cm.send_command(data.data)
