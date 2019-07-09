@@ -20,7 +20,7 @@ class Ethernetcommunicator:
     # Sets up the socket and initializes the class 
     def __init__(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.connect(('10.1.10.105', 500))
+        self.s.connect(('10.1.10.11', 23))
         self.s.settimeout(False)
         print("initialized ethernetcommunicator")
 
